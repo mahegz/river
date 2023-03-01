@@ -192,30 +192,37 @@ class GLM:
         with self._learn_mode(set(X)):
             return self._fit(X, y, w, get_grad=self._eval_gradient_many)
 
+    def merge(self, submodel, coef: float = 0.5):
+        """
+        Used to merge two linear models together
 
-    def merge(self, submodel, coef:float=0.5):
-        '''
-            Used to merge two linear models together
-            
-            Parameters
-            ----------
-                submodel: 
-                    a river linear model of the same type as self
-        '''
-        if type(self)!=type(submodel):
+        To use this method the model should have a stateless optimizer. Thus, it is currently
+        required to have SGD as an optimizer and no cummulative l1 regularization.
+
+        Note that uf self is not yet to be trained on any data. The parameters submodel will
+        be copied and coef will be ignored.
+
+        Parameters
+        ----------
+            submodel:
+                a river linear model of the same type as self to be merged
+            coef:
+                weight used in averging the two models. new parameters statisfy
+                new_param = (1-coef)*current_model_param+coef*submodel_param
+        """
+        if type(self) != type(submodel):
             raise ValueError("Merge method only implemented for elements of same class")
-        if self.l1!=0.0:
+        if self.l1 != 0.0:
             raise TypeError("Main model must have 0 l1 regulartization to support merge operations")
-        if type(self.optimizer)!=optim.SGD:
+        if type(self.optimizer) != optim.SGD:
             raise TypeError("Main model should have SGD optimizer to support merge operations")
-        if round(coef,2)>1.01 or round(coef,2)<0.0:
+        if round(coef, 2) > 1.01 or round(coef, 2) < 0.0:
             raise ValueError("coef should be between 0 and 1")
-        if len(self._weights)==0:
-            for i,k in submodel.weights.items():
+        if len(self._weights) == 0:
+            for i, k in submodel.weights.items():
                 self._weights[i] = k
                 self.intercept = submodel.intercept
         else:
             for i, k in self._weights.items():
-                self._weights[i] = coef*self._weights[i] + (1-coef)*submodel.weights[i]
-            self.intercept = coef*self.intercept+(1-coef)*submodel.intercept
-            
+                self._weights[i] = coef * self._weights[i] + (1 - coef) * submodel.weights[i]
+            self.intercept = coef * self.intercept + (1 - coef) * submodel.intercept
