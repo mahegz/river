@@ -1,13 +1,15 @@
+from __future__ import annotations
+
 import abc
 import random
 import typing
 
 from river import base
 
-__all__ = ["BinaryDistribution", "DiscreteDistribution", "ContinuousDistribution"]
+__all__ = ["Distribution", "BinaryDistribution", "DiscreteDistribution", "ContinuousDistribution"]
 
 
-class Distribution(base.Base):
+class Distribution(abc.ABC, base.Base):
     """General distribution.
 
     Parameters
@@ -17,7 +19,7 @@ class Distribution(base.Base):
 
     """
 
-    def __init__(self, seed: int = None):
+    def __init__(self, seed: int | None = None):
         self.seed = seed
         self._rng = random.Random(seed)
 
@@ -101,4 +103,27 @@ class ContinuousDistribution(Distribution):
 
     @abc.abstractmethod
     def cdf(self, x: float):
+        """Cumulative density function, i.e. P(X <= x)."""
+
+
+class MultivariateContinuousDistribution(Distribution):
+    """A probability distribution for multivariate continuous values.
+
+    Parameters
+    ----------
+    seed
+        Random number generator seed for reproducibility.
+
+    """
+
+    @abc.abstractmethod
+    def update(self, x: dict[str, float]):
+        """Updates the parameters of the distribution given a new observation."""
+
+    @abc.abstractmethod
+    def revert(self, x: dict[str, float]):
+        """Reverts the parameters of the distribution for a given observation."""
+
+    @abc.abstractmethod
+    def cdf(self, x: dict[str, float]) -> float:
         """Cumulative density function, i.e. P(X <= x)."""

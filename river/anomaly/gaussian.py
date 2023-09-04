@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from river import anomaly, proba, utils
 
 
@@ -7,7 +9,7 @@ class GaussianScorer(anomaly.base.SupervisedAnomalyDetector):
     This is a supervised anomaly detector. It fits a Gaussian distribution to the target values.
     The anomaly score is then computed as so:
 
-    $$score = 2 * \\mid CDF(y) - 0.5 \\mid$$
+    $$score = 2 \\mid CDF(y) - 0.5 \\mid$$
 
     This makes it so that the anomaly score is between 0 and 1.
 
@@ -55,11 +57,11 @@ class GaussianScorer(anomaly.base.SupervisedAnomalyDetector):
         )
         self.grace_period = grace_period
 
-    def learn_one(self, _, y):
+    def learn_one(self, x, y):
         self.gaussian.update(y)
         return self
 
-    def score_one(self, _, y):
+    def score_one(self, x, y):
         if self.gaussian.n_samples < self.grace_period:
             return 0
         return 2 * abs(self.gaussian.cdf(y) - 0.5)

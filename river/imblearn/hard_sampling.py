@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import collections
 import random
 import typing
@@ -13,7 +15,7 @@ class Triplet(collections.namedtuple("Triplet", "x y loss")):
 class HardSampling(base.Wrapper):
     """Hard sampler."""
 
-    def __init__(self, model, loss, size, p, seed: int = None):
+    def __init__(self, model, loss, size, p, seed: int | None = None):
         self.model = model
         self.loss = loss
         self.p = p
@@ -120,10 +122,10 @@ class HardSamplingRegressor(HardSampling, base.Regressor):
     ...     metrics.MAE(),
     ...     print_every=500
     ... )
-    [500] MAE: 2.292501
-    [1,000] MAE: 1.395797
-    [1,001] MAE: 1.394693
-    MAE: 1.394693
+    [500] MAE: 2.274021
+    [1,000] MAE: 1.392399
+    [1,001] MAE: 1.391246
+    MAE: 1.391246
 
     """
 
@@ -132,8 +134,8 @@ class HardSamplingRegressor(HardSampling, base.Regressor):
         regressor: base.Regressor,
         size: int,
         p: float,
-        loss: optim.losses.RegressionLoss = None,
-        seed: int = None,
+        loss: optim.losses.RegressionLoss | None = None,
+        seed: int | None = None,
     ):
         if loss is None:
             loss = optim.losses.Absolute()
@@ -201,10 +203,10 @@ class HardSamplingClassifier(HardSampling, base.Classifier):
     ...     metric=metrics.ROCAUC(),
     ...     print_every=500,
     ... )
-    [500] ROCAUC: 92.71%
-    [1,000] ROCAUC: 94.75%
-    [1,250] ROCAUC: 95.05%
-    ROCAUC: 95.05%
+    [500] ROCAUC: 92.78%
+    [1,000] ROCAUC: 94.76%
+    [1,250] ROCAUC: 95.06%
+    ROCAUC: 95.06%
 
     """
 
@@ -213,8 +215,8 @@ class HardSamplingClassifier(HardSampling, base.Classifier):
         classifier: base.Classifier,
         size: int,
         p: float,
-        loss: typing.Union[optim.losses.BinaryLoss, optim.losses.MultiClassLoss] = None,
-        seed: int = None,
+        loss: optim.losses.BinaryLoss | optim.losses.MultiClassLoss | None = None,
+        seed: int | None = None,
     ):
         if loss is None:
             loss = optim.losses.CrossEntropy() if classifier._multiclass else optim.losses.Log()

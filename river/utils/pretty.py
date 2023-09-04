@@ -10,7 +10,7 @@ __all__ = ["humanize_bytes", "print_table"]
 def print_table(
     headers: list[str],
     columns: list[list[str]],
-    order: list[int] = None,
+    order: list[int] | None = None,
 ):
     """Pretty-prints a table.
 
@@ -34,7 +34,7 @@ def print_table(
         raise ValueError("all the columns must be of the same length")
 
     # Determine the width of each column based on the maximum length of it's elements
-    col_widths = [max(*map(len, col), len(header)) for header, col in zip(headers, columns)]
+    col_widths = [max(len(col) if col else 0, len(header)) for header, col in zip(headers, columns)]
 
     # Make a template to print out rows one by one
     row_format = " ".join(["{:" + str(width + 2) + "s}" for width in col_widths])

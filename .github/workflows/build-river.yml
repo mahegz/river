@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ inputs.os }}
 
     # Instead of using two matrices in the calling Workflow, we can use conditionals here
-    if: (inputs.os == 'ubuntu-latest' && inputs.python == '3.11') || github.event_name == 'push'
+    if: (inputs.python == '3.11') || github.event_name == 'push'
 
     steps:
       - uses: actions/checkout@v3
@@ -41,7 +41,7 @@ jobs:
           path: ~/.venv
           key: ${{ runner.os }}-${{ inputs.python }}-venv-${{ hashFiles('**/setup.py') }}
           restore-keys: |
-            ${{ github.run_id }}-venv-${{ runner.os }}-${{ inputs.python }}
+            venv-${{ runner.os }}-${{ inputs.python }}
             ${{ runner.os }}-${{ inputs.python }}-venv-
 
       - name: Install Python dependencies
@@ -54,7 +54,6 @@ jobs:
           pip install scikit-learn sqlalchemy
           pip install pytest-xdist[psutil]
           pip install numpydoc jupyter
-          pip install git+https://github.com/MaxHalford/yamp
 
       - name: Build River
         run: |
@@ -69,4 +68,4 @@ jobs:
         id: cache-river
         with:
           path: ${{ github.workspace }}
-          key: river-build-${{ github.run_id }}-${{ runner.os }}-${{ inputs.python }}
+          key: river-build-${{ runner.os }}-${{ inputs.python }}

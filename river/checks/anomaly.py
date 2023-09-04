@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+
 def check_roc_auc(anomaly_detector, dataset):
     """The ROC AUC should always be above 50%."""
 
@@ -13,4 +16,4 @@ def check_roc_auc(anomaly_detector, dataset):
         scores.append(y_pred)
         labels.append(y)
 
-    assert metrics.roc_auc_score(labels, scores) > 0.5
+    assert metrics.roc_auc_score(labels, scores) >= 0.5

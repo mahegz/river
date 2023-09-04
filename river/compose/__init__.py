@@ -4,9 +4,11 @@ This module contains utilities for merging multiple modeling steps into a single
 pipelines are not the only way to process a stream of data, we highly encourage you to use them.
 
 """
+from __future__ import annotations
+
 from .func import FuncTransformer
 from .grouper import Grouper
-from .pipeline import Pipeline, pure_inference_mode, warm_up_mode
+from .pipeline import Pipeline, learn_during_predict
 from .product import TransformerProduct
 from .renamer import Prefixer, Renamer, Suffixer
 from .select import Discard, Select, SelectType
@@ -27,5 +29,5 @@ __all__ = [
     "TargetTransformRegressor",
     "TransformerProduct",
     "TransformerUnion",
-    "warm_up_mode",
+    "learn_during_predict",
 ]

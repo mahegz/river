@@ -1,9 +1,9 @@
-import math
-import typing
+from __future__ import annotations
 
-from river import base
+import math
+
+from river import base, optim
 from river import linear_model as lm
-from river import optim
 from river import preprocessing as pp
 
 __all__ = ["EWARegressor"]
@@ -52,9 +52,9 @@ class EWARegressor(base.Ensemble, base.Regressor):
     ...     )
     ...
     ...     print(optimizer, evaluate.progressive_val_score(dataset, model, metric))
-    SGD MAE: 0.555971
-    RMSProp MAE: 0.528284
-    AdaGrad MAE: 0.481461
+    SGD MAE: 0.558735
+    RMSProp MAE: 0.522449
+    AdaGrad MAE: 0.477289
 
     >>> dataset = datasets.TrumpApproval()
     >>> metric = metrics.MAE()
@@ -70,7 +70,7 @@ class EWARegressor(base.Ensemble, base.Regressor):
     ... )
 
     >>> evaluate.progressive_val_score(dataset, hedge, metric)
-    MAE: 0.494832
+    MAE: 0.496298
 
     References
     ----------
@@ -82,8 +82,8 @@ class EWARegressor(base.Ensemble, base.Regressor):
 
     def __init__(
         self,
-        models: typing.List[base.Regressor],
-        loss: optim.losses.RegressionLoss = None,
+        models: list[base.Regressor],
+        loss: optim.losses.RegressionLoss | None = None,
         learning_rate=0.5,
     ):
         super().__init__(models)  # type: ignore

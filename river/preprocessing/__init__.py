@@ -6,11 +6,15 @@ one-hot encoding categorical features. The difference with the `feature_extracti
 the latter extracts new information from the data
 
 """
+from __future__ import annotations
+
 from .feature_hasher import FeatureHasher
 from .impute import PreviousImputer, StatImputer
 from .lda import LDA
 from .one_hot import OneHotEncoder
+from .ordinal import OrdinalEncoder
 from .pred_clipper import PredClipper
+from .random_projection import GaussianRandomProjector, SparseRandomProjector
 from .scale import (
     AdaptiveStandardScaler,
     Binarizer,
@@ -19,22 +23,26 @@ from .scale import (
     Normalizer,
     RobustScaler,
     StandardScaler,
-    TargetStandardScaler,
 )
+from .scale_target import TargetMinMaxScaler, TargetStandardScaler
 
 __all__ = [
     "AdaptiveStandardScaler",
     "Binarizer",
     "FeatureHasher",
+    "GaussianRandomProjector",
     "LDA",
     "MaxAbsScaler",
     "MinMaxScaler",
     "Normalizer",
     "OneHotEncoder",
+    "OrdinalEncoder",
     "PredClipper",
     "PreviousImputer",
     "RobustScaler",
+    "SparseRandomProjector",
     "StandardScaler",
     "StatImputer",
+    "TargetMinMaxScaler",
     "TargetStandardScaler",
 ]

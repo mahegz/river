@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from copy import deepcopy
 
 from river import base, linear_model
@@ -96,7 +98,8 @@ class HoeffdingTreeRegressor(HoeffdingTree, base.Regressor):
     >>> metric = metrics.MAE()
 
     >>> evaluate.progressive_val_score(dataset, model, metric)
-    MAE: 0.781781
+    MAE: 0.793345
+
     """
 
     _TARGET_MEAN = "mean"
@@ -108,14 +111,14 @@ class HoeffdingTreeRegressor(HoeffdingTree, base.Regressor):
     def __init__(
         self,
         grace_period: int = 200,
-        max_depth: int = None,
+        max_depth: int | None = None,
         delta: float = 1e-7,
         tau: float = 0.05,
         leaf_prediction: str = "adaptive",
-        leaf_model: base.Regressor = None,
+        leaf_model: base.Regressor | None = None,
         model_selector_decay: float = 0.95,
-        nominal_attributes: list = None,
-        splitter: Splitter = None,
+        nominal_attributes: list | None = None,
+        splitter: Splitter | None = None,
         min_samples_split: int = 5,
         binary_split: bool = False,
         max_size: float = 500.0,

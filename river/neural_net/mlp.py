@@ -3,7 +3,6 @@ from __future__ import annotations
 import collections
 import copy
 import functools
-import typing
 
 import numpy as np
 import pandas as pd
@@ -13,7 +12,7 @@ from river import base, optim
 __all__ = ["MLPRegressor"]
 
 
-def xavier_init(dims: tuple[int, ...], seed: int = None):
+def xavier_init(dims: tuple[int, ...], seed: int | None = None):
     """Xavier weight initialization.
 
     References
@@ -51,14 +50,14 @@ class MLP:
         activations,
         loss: optim.losses.Loss,
         optimizer: optim.base.Optimizer,
-        seed: int = None,
+        seed: int | None = None,
     ):
         self.activations = activations
         self.hidden_dims = hidden_dims
         self.loss = loss
         self.optimizer = optimizer
         self.seed = seed
-        self._optimizers: typing.DefaultDict = collections.defaultdict(
+        self._optimizers: collections.defaultdict = collections.defaultdict(
             functools.partial(copy.deepcopy, optimizer)
         )
 
@@ -204,7 +203,7 @@ class MLPRegressor(base.Regressor, MLP):
     loss
         Loss function. Defaults to `optim.losses.Squared`.
     optimizer
-        Optimizer. Defaults to `optim.SGD(.01)`.
+        Optimizer. Defaults to `optim.SGD` with the learning rate set to `0.01`.
     seed
         Random number generation seed. Set this for reproducibility.
 
@@ -237,7 +236,7 @@ class MLPRegressor(base.Regressor, MLP):
     >>> metric = metrics.MAE()
 
     >>> evaluate.progressive_val_score(dataset, model, metric)
-    MAE: 1.589827
+    MAE: 1.580578
 
     You can also use this to process mini-batches of data.
 
@@ -266,15 +265,15 @@ class MLPRegressor(base.Regressor, MLP):
 
     >>> model.predict_many(xb)
           five_thirty_eight
-    992           39.361609
-    993           46.398536
-    994           42.094086
-    995           40.195802
-    996           40.782954
-    997           40.839678
-    998           40.896403
-    999           48.362659
-    1000          42.021849
+    992           39.405231
+    993           46.447481
+    994           42.121865
+    995           40.251148
+    996           40.836378
+    997           40.893153
+    998           40.949927
+    999           48.416504
+    1000          42.077830
 
     """
 
@@ -282,9 +281,9 @@ class MLPRegressor(base.Regressor, MLP):
         self,
         hidden_dims,
         activations,
-        loss: optim.losses.Loss = None,
-        optimizer: optim.base.Optimizer = None,
-        seed: int = None,
+        loss: optim.losses.Loss | None = None,
+        optimizer: optim.base.Optimizer | None = None,
+        seed: int | None = None,
     ):
         super().__init__(
             hidden_dims=hidden_dims,

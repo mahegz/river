@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import typing
 
 from river import base
@@ -40,7 +42,7 @@ class TargetTransformRegressor(base.Wrapper, base.Regressor):
     >>> metric = metrics.MSE()
 
     >>> evaluate.progressive_val_score(dataset, model, metric)
-    MSE: 8.759624
+    MSE: 10.999752
 
     """
 
@@ -58,7 +60,11 @@ class TargetTransformRegressor(base.Wrapper, base.Regressor):
     def _wrapped_model(self):
         return self.regressor
 
+    def _update(self, y):
+        ...
+
     def learn_one(self, x, y):
+        self._update(y)
         self.regressor.learn_one(x, self.func(y))
         return self
 
